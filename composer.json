@@ -1,12 +1,12 @@
 {
     "name": "mukja/hackerrank",
-    "description": ":description",
+    "description": ":Laravel HackerRank API SDK",
     "license": "MIT",
     "authors": [
         {
             "name": "Eluert Mukja",
             "email": "e.mukja@icloud.com",
-            "homepage": "author homepage"
+            "homepage": "https://github.com/Erth0"
         }
     ],
     "homepage": "https://github.com/mukja/hackerrank",
