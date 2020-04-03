@@ -13,12 +13,6 @@ class HackerRankServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'mukja');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'mukja');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
-
-        // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
             $this->bootForConsole();
         }
@@ -48,7 +42,7 @@ class HackerRankServiceProvider extends ServiceProvider
     {
         return ['hackerrank'];
     }
-    
+
     /**
      * Console-specific booting.
      *
