@@ -4,16 +4,13 @@ namespace Mukja\HackerRank;
 
 use GuzzleHttp\Client as HttpClient;
 use Mukja\HackerRank\MakesHttpRequests;
-use Mukja\HackerRank\Actions\ManageTests;
-use Mukja\HackerRank\Actions\ManageUsers;
-use Mukja\HackerRank\Actions\ManageTestCandidates;
+use Mukja\HackerRank\Exceptions\ApiKeyMissingException;
 
 class HackerRank
 {
-    use MakesHttpRequests,
-        ManageUsers,
-        ManageTests,
-        ManageTestCandidates;
+    use MakesHttpRequests;
+
+    const API_VERSION = 'v3';
 
     /**
      * The HackerRank API Key.
@@ -37,21 +34,37 @@ class HackerRank
     public $timeout = 30;
 
     /**
+     * HackerRank base uri.
+     *
+     * @var string
+     */
+    public $baseUri = 'https://www.hackerrank.com/x/api/v3/';
+
+    /**
+    *
+    * @var Singleton
+    */
+    private static $instance;
+
+    /**
      * Create a new Forge instance.
      *
      * @param  string $apiKey
      * @param  \GuzzleHttp\Client $guzzle
      * @return void
      */
-    public function __construct($apiKey = null, HttpClient $guzzle = null)
+    public function __construct($apiKey)
     {
-        if (! is_null($apiKey)) {
-            $this->setApiKey($apiKey, $guzzle);
-        }
-
-        if (! is_null($guzzle)) {
-            $this->guzzle = $guzzle;
-        }
+        $this->apiKey = $apiKey;
+        $this->guzzle = new HttpClient([
+            'base_uri' => $this->baseUri,
+            'http_errors' => false,
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer '.$this->apiKey
+            ]
+        ]);
     }
 
     /**
@@ -62,10 +75,10 @@ class HackerRank
      * @param  array $extraData
      * @return array
      */
-    protected function transformCollection($collection, $class, $extraData = [])
+    public function transformCollection($collection, $class, $extraData = [])
     {
         return array_map(function ($data) use ($class, $extraData) {
-            return new $class($data + $extraData, $this);
+            return new $class($data + $extraData);
         }, $collection);
     }
 
@@ -75,20 +88,15 @@ class HackerRank
      * @param string $apiKey
      * @return $this
      */
-    public function setApiKey($apiKey, $guzzle)
+    public static function setApiKey($apiKey)
     {
-        $this->apiKey = $apiKey;
-        $this->guzzle = $guzzle ?: new HttpClient([
-            'base_uri' => 'https://www.hackerrank.com/x/api/v3/',
-            'http_errors' => false,
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer '.$this->apiKey
-            ]
-        ]);
+        if (is_null($apiKey)) {
+            throw new ApiKeyMissingException();
+        }
 
-        return $this;
+        self::$instance = new self($apiKey);
+
+        return self::$instance;
     }
 
     /**
@@ -112,5 +120,19 @@ class HackerRank
     public function getTimeout()
     {
         return $this->timeout;
+    }
+
+    public static function getInstance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
+    public static function getVersion()
+    {
+        return self::API_VERSION;
     }
 }

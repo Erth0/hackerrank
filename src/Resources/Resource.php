@@ -2,34 +2,13 @@
 
 namespace Mukja\HackerRank\Resources;
 
-class Resource
+trait Resource
 {
-    /**
-     * The resource attributes.
-     *
-     * @var array
-     */
-    public $attributes;
+    protected $attributes;
 
-    /**
-     * The HackerRank SDK instance.
-     *
-     * @var HackerRank
-     */
-    protected $hackerRank;
-
-    /**
-     * Create a new resource instance.
-     *
-     * @param  array $attributes
-     * @param  HackerRank $hackerRank
-     * @return void
-     */
-    public function __construct(array $attributes, $hackerRank = null)
+    public function __construct(array $attributes)
     {
         $this->attributes = $attributes;
-        $this->hackerRank = $hackerRank;
-
         $this->fill();
     }
 

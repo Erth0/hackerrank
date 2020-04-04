@@ -2,148 +2,99 @@
 
 namespace Mukja\HackerRank\Resources;
 
+use Mukja\HackerRank\HackerRank;
 use Mukja\HackerRank\Resources\Resource;
 
-class User extends Resource
+class User
 {
-    // /**
-    //  * ID of the user
-    //  * @var string
-    //  */
-    // public $id;
+    use Resource;
 
-    // /**
-    //  * Email address of user
-    //  * @var string
-    //  */
-    // public $email;
+    /**
+     * Get the collection of users.
+     *
+     * @return User[]
+     */
+    public static function get($limit = 10, $offset = 0)
+    {
+        $hackerRank = HackerRank::getInstance();
 
-    // /**
-    //  * First name of user
-    //  * @var string
-    //  */
-    // public $firstname;
+        return $hackerRank->transformCollection(
+            $hackerRank->get("users?limit={$limit}&offset={$offset}")['data'], User::class
+        );
+    }
 
-    // /**
-    //  * last name of user
-    //  * @var string
-    //  */
-    // public $lastname;
+    /**
+     * Get a user instance.
+     *
+     * @param  string $userId
+     * @return User
+     */
+    public static function retrive($userId) :User
+    {
+        $hackerRank = HackerRank::getInstance();
 
-    // /**
-    //  * Country of user
-    //  * @var string
-    //  */
-    // public $country;
+        return new User($hackerRank->get("users/{$userId}"));
+    }
 
-    // /**
-    //  * Role of user
-    //  * [recruiter, developer, admin]
-    //  * @var string
-    //  */
-    // public $role;
+    /**
+     * Create a new user.
+     *
+     * @param  array $data
+     * @return User
+     */
+    public static function create(array $data) :User
+    {
+        $hackerRank = HackerRank::getInstance();
+        $response = $hackerRank->post('users', $data);
 
-    // /**
-    //  * Whether to send activation mail to user.
-    //  * @var boolean
-    //  */
-    // public $send_email;
+        return new User($response);
+    }
 
-    // /**
-    //  * Current status of user. While querying,
-    //  * by default only active users will be returned
-    //  * [locked, active, all]
-    //  * @var string
-    //  */
-    // public $status;
+    /**
+     * Update the given user.
+     *
+     * @param  string $userId
+     * @param  array $data
+     * @return User
+     */
+    public function update(array $data)
+    {
+        $hackerRank = HackerRank::getInstance();
 
-    // /**
-    //  * Phone number of the user
-    //  * @var string
-    //  */
-    // public $phone;
+        return $hackerRank->put("users/{$this->id}", $data);
+    }
 
-    // /**
-    //  * Timezone of the user
-    //  * @var string
-    //  */
-    // public $timezone;
+    /**
+     * Delete the given user.
+     *
+     * @param  string $userId
+     * @return void
+     */
+    public function lock($userId)
+    {
+        $hackerRank = HackerRank::getInstance();
 
-    // /**
-    //  * Whether user has permission to create questions.
-    //  * [0, 3]
-    //  * @var integer
-    //  */
-    // public $questions_permission;
+        $hackerRank->delete("users/{$userId}");
+    }
 
-    // /**
-    //  * Whether user has permission to create tests.
-    //  * [0, 3]
-    //  * @var integer
-    //  */
-    // public $tests_permission;
+    /**
+     * Search Users
+     * @param  string  $searchString
+     * @param  integer $limit
+     * @param  integer $offset
+     * @return array
+     */
+    public function search(string $searchString, $limit = 10, $offset = 0) :array
+    {
+        $hackerRank = HackerRank::getInstance();
 
-    // /**
-    //  * Whether user has permission to create candidates.
-    //  * [0, 3]
-    //  * @var integer
+        return $hackerRank->transformCollection(
+            $hackerRank->get("users/search?search={$searchString}&limit={$limit}&offset={$offset}")['data'], User::class
+        );
+    }
 
-    // public $interviews_permission;
-
-    // /**
-    //  * Whether user has permission to view/edit/delete
-    //  * questions shared with it.
-    //  * [0, 1, 2, 3]
-    //  * @var integer
-    //  */
-    // public $shared_questions_permission;
-
-    // /**
-    //  * Whether user has permission to view/edit/delete
-    //  * tests shared with it.
-    //  * [0, 1, 2, 3]
-    //  * @var integer
-    //  */
-    // public $shared_tests_permission;
-
-    // /**
-    //  * Whether user has permission to view/edit/delete
-    //  * interviews shared with it.
-    //  * [0, 1, 2, 3]
-    //  * @var integer
-    //  */
-    // public $shared_interviews_permission;
-
-    // /**
-    //  * Whether user has permission to view/edit/delete
-    //  * candidates shared with it.
-    //  * [0, 1, 2, 3]
-    //  * @var integer
-    //  */
-    // public $shared_candidates_permission;
-
-    // /**
-    //  * Whether the user is a company admin or not.
-    //  * @var boolean
-    //  */
-    // public $company_admin;
-
-    // /**
-    //  * Whether the user is a team admin of the teams that it is a part of.
-    //  * @var boolean
-    //  */
-    // public $team_admin;
-
-    // /**
-    //  * Whether the user email is activated or not.
-    //  * @var boolean
-    //  */
-    // public $activated;
-
-    // /**
-    //  * Timestamp when the user was last active.
-    //  * @var string|dateTime
-    //  */
-    // public $last_activity_time;
-
+    public function invite($testId)
+    {
+        dd($testId);
+    }
 }

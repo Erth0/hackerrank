@@ -1,0 +1,65 @@
+User:
+ ☐ User::create();
+ ☐ User::all();
+ ☐ User::retreive();
+ ☐ User::retreive($userId)->update([]);
+ ☐ User::update($userId , []);
+ ☐ User::lock();
+ ☐ User::retreive($userId)->lock();
+ ☐ User::search();
+
+Team:
+ ☐ Team::get($limit = 10, $offset = 0);
+ ☐ Team::retreive(int $teamId);
+ ☐ Team::create(array $data);
+ ☐ Team::retreive($teamId)->delete();
+ ☐ Team::retreive($teamId)->update(array $data);
+ ☐ Team::search();
+ ☐ Team::retreive($teamId)->memberships();
+ ☐ Team::retreive($teamId)->membership(int $userId);
+ ☐ Team::retreive($teamId)->addMembership(int $userId);
+ ☐ Team::retreive($teamId)->removeMembership(int $userId);
+UserMembership:
+ ☐ UserMembership::all($teamId);
+ ☐ UserMembership::retreive($teamId, $userId);
+ ☐ UserMembership::create($teamId, $userId);
+ ☐ UserMembership::delete($teamId, $userId);
+Test:
+ ☐ Test::get();
+ ☐ Test::create([]);
+ ☐ Test::retreive($testId);
+ ☐ Test::update($testId, []);
+ ☐ Test::retreive($testId)->update([]);
+ ☐ Test::delete($testId);
+ ☐ Test::retreive($testId)->delete();
+ ☐ Test::archive($testId);
+ ☐ Test::retreive($testId)->archive();
+ ☐ Test::inviters($testId);
+ ☐ Test::retreive($testId)->inviters();
+ ☐ Test::invite($testId, []);
+ ☐ Test::retreive($testId)->invite([]);
+ ☐ Test::retreive($testId)->candidate($candidateId);
+ ☐ Test::retreive($testId)->candidate($candidateId)->update([]);
+ ☐ Test::retreive($testId)->candidate($candidateId)->pdfReport();
+ ☐ Test::retreive($testId)->candidate($candidateId)->cancelInvitation();
+ ☐ Test::retreive($testId)->candidates(searchQueries);
+TestCandidate:
+ ☐ TestCandidate::all();
+ ☐ TestCandidate::invite($testId, []);
+ ☐ TestCandidate::show($testId, $candidateId);
+ ☐ TestCandidate::update($testId, $candidateId, []);
+ ☐ TestCandidate::retreive($testId, $candidateId)->update([]);
+ ☐ TestCandidate::pdfReport($testId, $candidateId);
+ ☐ TestCandidate::search($testId);
+Interview:
+ ☐ Interview::get();
+ ☐ Interview::retrive(int $interviewId);
+ ☐ Interview::create(array $data);
+ ☐ Interview::retrive(int $intervieId)->update(array $data);
+ ☐ Interview::retrive(int $intervieId)->delete();
+ Question:
+ ☐ Question::get();
+Template:
+
+AuditLog:
+  ☐ AuditLog::get($limit = 10, $offset = 0);

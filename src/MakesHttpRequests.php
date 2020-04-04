@@ -2,11 +2,12 @@
 
 namespace Mukja\HackerRank;
 
-use Psr\Http\Message\ResponseInterface;
-use Mukja\HackerRank\Exceptions\TimeoutException;
-use Mukja\HackerRank\Exceptions\NotFoundException;
-use Mukja\HackerRank\Exceptions\ValidationException;
 use Mukja\HackerRank\Exceptions\FailedActionException;
+use Mukja\HackerRank\Exceptions\NotFoundException;
+use Mukja\HackerRank\Exceptions\PermissionException;
+use Mukja\HackerRank\Exceptions\TimeoutException;
+use Mukja\HackerRank\Exceptions\ValidationException;
+use Psr\Http\Message\ResponseInterface;
 
 trait MakesHttpRequests
 {
@@ -16,7 +17,7 @@ trait MakesHttpRequests
      * @param  string $uri
      * @return mixed
      */
-    private function get($uri)
+    public function get($uri)
     {
         return $this->request('GET', $uri);
     }
@@ -28,7 +29,7 @@ trait MakesHttpRequests
      * @param  array $payload
      * @return mixed
      */
-    private function post($uri, array $payload = [])
+    public function post($uri, array $payload = [])
     {
         return $this->request('POST', $uri, $payload);
     }
@@ -40,7 +41,7 @@ trait MakesHttpRequests
      * @param  array $payload
      * @return mixed
      */
-    private function put($uri, array $payload = [])
+    public function put($uri, array $payload = [])
     {
         return $this->request('PUT', $uri, $payload);
     }
@@ -52,7 +53,7 @@ trait MakesHttpRequests
      * @param  array $payload
      * @return mixed
      */
-    private function delete($uri, array $payload = [])
+    public function delete($uri, array $payload = [])
     {
         return $this->request('DELETE', $uri, $payload);
     }
@@ -65,13 +66,18 @@ trait MakesHttpRequests
      * @param  array $payload
      * @return mixed
      */
-    private function request($verb, $uri, array $payload = [])
+    public function request($verb, $uri, array $payload = [])
     {
         $response = $this->guzzle->request($verb, $uri,
             empty($payload) ? [] : ['form_params' => $payload]
         );
 
         if ($response->getStatusCode() != 200) {
+            // Check for 204 response
+            if ($response->getStatusCode() == 204 && $verb === 'DELETE') {
+                return true;
+            }
+
             return $this->handleRequestError($response);
         }
 
@@ -84,7 +90,7 @@ trait MakesHttpRequests
      * @param  \Psr\Http\Message\ResponseInterface $response
      * @return void
      */
-    private function handleRequestError(ResponseInterface $response)
+    public function handleRequestError(ResponseInterface $response)
     {
         if ($response->getStatusCode() == 422) {
             throw new ValidationException(json_decode((string) $response->getBody(), true));
@@ -96,6 +102,14 @@ trait MakesHttpRequests
 
         if ($response->getStatusCode() == 400) {
             throw new FailedActionException((string) $response->getBody());
+        }
+
+        if ($response->getStatusCode() == 403) {
+            $responseBody = json_decode((string) $response->getBody(), true);
+
+            throw new PermissionException(
+                $responseBody['errors'][0]
+            );
         }
 
         throw new \Exception((string) $response->getBody());

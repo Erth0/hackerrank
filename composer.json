@@ -1,6 +1,6 @@
 {
     "name": "mukja/hackerrank",
-    "description": ":Laravel HackerRank API SDK",
+    "description": ":HackerRank API SDK",
     "license": "MIT",
     "authors": [
         {
@@ -10,9 +10,10 @@
         }
     ],
     "homepage": "https://github.com/mukja/hackerrank",
-    "keywords": ["Laravel", "HackerRank"],
+    "keywords": ["Laravel", "HackerRank", "PHP", "SDK", "Asessments"],
     "require": {
-        "illuminate/support": "~5|~6|~7"
+        "illuminate/support": "~5|~6|~7",
+        "guzzlehttp/guzzle": "^6.5"
     },
     "require-dev": {
         "phpunit/phpunit": "~7.0",
