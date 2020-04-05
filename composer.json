@@ -1,6 +1,6 @@
 {
     "name": "mukja/hackerrank",
-    "description": ":HackerRank API SDK",
+    "description": ":HackerRank Unofficial PHP SDK",
     "license": "MIT",
     "authors": [
         {

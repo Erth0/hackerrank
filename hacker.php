@@ -40,7 +40,8 @@ $hacker = HackerRank::setApiKey('4d348080ab139e946feeb6bf7027ce784a400b2c9aa34ca
 // $team = Team::retreive(161693);
 // $membership = Team::retreive(104406)->membership(265303);
 //
-$questions = Question::get([
-    'status' => 'active',
-]);
-dd($questions);
+// $questions = Question::get([
+//     'status' => 'active',
+// ]);
+dd(TestCandidate::select('id', 'name', 'username')->test(638410, 17419846));
+dd(Team::select('id', 'name')->select('username')->select('test')->with('user', 'test')->get());

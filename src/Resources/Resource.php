@@ -6,10 +6,28 @@ trait Resource
 {
     protected $attributes;
 
+    protected static $with = [];
+
+    protected static $fields = [];
+
     public function __construct(array $attributes)
     {
         $this->attributes = $attributes;
         $this->fill();
+    }
+
+    public static function with(...$resources)
+    {
+        static::$with = array_merge(static::$with, $resources);
+
+        return new self([]);
+    }
+
+    public static function select(...$fields)
+    {
+        static::$fields = $fields;
+
+        return new self([]);
     }
 
     /**

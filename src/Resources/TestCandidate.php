@@ -2,12 +2,20 @@
 
 namespace Mukja\HackerRank\Resources;
 
+// use RecursiveArrayIterator;
 use Mukja\HackerRank\HackerRank;
 use Mukja\HackerRank\Resources\Resource;
 
 class TestCandidate
 {
     use Resource;
+
+    public function test()
+    {
+        // $fields = array_unique(array_merge(...self::$fields));
+        // $fields = 'fields=' . implode(',', self::$fields);
+        dd(...self::$fields);
+    }
 
     public function get(int $testId, $limit = 10, $offset = 0)
     {
